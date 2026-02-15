@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Ujian Online</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html, body, #app-wrapper {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes checkmark {
+      0% { stroke-dashoffset: 50; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .animate-slide-in-up {
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 1s ease-out;
+    }
+
+    .animate-scale-in {
+      animation: scaleIn 0.5s ease-out;
+    }
+
+    .checkmark-path {
+      stroke-dasharray: 50;
+      animation: checkmark 0.6s ease-out forwards;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    }
+
+    .card-glass {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .input-modern {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .input-modern:focus {
+      background: white;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .error-shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .header-divider {
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #dbeafe;
+      color: #1e40af;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .success-badge {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .logo-container {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+    }
+
+    .icon-circle {
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app-wrapper" class="w-full h-full overflow-auto gradient-bg"><!-- Header Bar -->
+   <div class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-6 py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+       <div class="logo-container">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+        </svg>
+       </div>
+       <div>
+        <h2 id="institution-name" class="text-lg font-bold text-gray-900">Portal Ujian Online</h2>
+        <p class="text-xs text-gray-500">Sistem Manajemen Ujian Terpadu</p>
+       </div>
+      </div><span class="badge">V 1.0</span>
+     </div>
+    </div>
+    <div class="header-divider"></div>
+   </div><!-- Main Content -->
+   <div class="flex-1 flex items-center justify-center py-12 px-6">
+    <div class="w-full max-w-2xl"><!-- Two Column Layout -->
+     <div class="grid grid-cols-1 lg:grid-cols-5 gap-8"><!-- Left Column - Info -->
+      <div class="lg:col-span-2 animate-slide-in-up">
+       <div class="space-y-6">
+        <div>
+         <h1 id="exam-title" class="text-3xl font-bold text-white mb-2">Ujian Online</h1>
+         <p class="text-blue-200 text-sm font-medium">Verifikasi Identitas Peserta</p>
+        </div>
+        <div class="space-y-4">
+         <div class="flex items-start gap-3">
+          <div class="icon-circle">
+           <svg class="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+           </svg>
+          </div>
+          <div>
+           <p class="text-white text-sm font-semibold">Tanggal Ujian</p>
+           <p id="exam-date" class="text-blue-100 text-sm">15 Januari 2024</p>
+          </div>
+         </div>
+         <div class="flex items-start gap-3">
+          <div class="icon-circle">
+           <svg class="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+           </svg>
+          </div>
+          <div>
+           <p class="text-white text-sm font-semibold">Sistem Keamanan</p>
+           <p class="text-blue-100 text-sm">Verifikasi nama peserta diperlukan</p>
+          </div>
+         </div>
+         <div class="flex items-start gap-3">
+          <div class="icon-circle">
+           <svg class="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+           </svg>
+          </div>
+          <div>
+           <p class="text-white text-sm font-semibold">Mode Aman</p>
+           <p class="text-blue-100 text-sm">Ujian terbuka di tab baru</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Right Column - Form -->
+      <div class="lg:col-span-3 animate-slide-in-up">
+       <div id="form-container" class="card-glass rounded-2xl p-8 shadow-2xl"><!-- Form Title -->
+        <div class="mb-8"><span class="badge">LANGKAH 1</span>
+         <h2 class="text-2xl font-bold text-gray-900 mt-3 mb-2">Masuk ke Ujian</h2>
+         <p id="instructions" class="text-gray-600 text-sm">Masukkan nama lengkap Anda sesuai daftar peserta</p>
+        </div><!-- Form -->
+        <form id="verification-form" class="space-y-6">
+         <div><label for="nama-peserta" class="block text-sm font-semibold text-gray-700 mb-2"> Nama Lengkap </label> <input type="text" id="nama-peserta" name="nama" placeholder="Contoh: SAIFUL BAHRI" autocomplete="off" class="w-full px-4 py-3 rounded-lg input-modern font-medium text-gray-900">
+          <p id="error-message" class="hidden mt-3 text-sm text-red-600 flex items-center gap-2 font-medium">
+           <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+           </svg><span id="error-text">Nama tidak ditemukan dalam daftar peserta</span></p>
+         </div><button type="submit" id="submit-btn" class="w-full py-3 px-6 rounded-lg text-white font-semibold text-base btn-primary flex items-center justify-center gap-2"> <span id="button-text">Lanjut ke Ujian</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg></button>
+        </form><!-- Info Box -->
+        <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+         <div class="flex items-start gap-3">
+          <div class="flex-shrink-0 w-5 h-5 rounded-full bg-blue-200 flex items-center justify-center mt-0.5">
+           <svg class="w-3 h-3 text-blue-600" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+           </svg>
+          </div>
+          <p class="text-sm text-gray-700 leading-relaxed"><strong>Catatan:</strong> Gunakan nama sesuai pendaftaran. Penulisan tidak perlu menggunakan kapital jika tidak diperlukan. Koneksi internet stabil sangat disarankan.</p>
+         </div>
+        </div>
+       </div><!-- Success State (Hidden) -->
+       <div id="success-container" class="hidden card-glass rounded-2xl p-8 shadow-2xl animate-scale-in">
+        <div class="text-center py-4">
+         <div class="flex justify-center mb-6">
+          <div class="relative">
+           <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+            <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" class="checkmark-path"></path>
+            </svg>
+           </div>
+          </div>
+         </div>
+         <h3 class="text-2xl font-bold text-gray-900 mb-2">Verifikasi Berhasil</h3>
+         <p class="text-gray-600 mb-1">Selamat datang,</p>
+         <p id="welcome-name" class="text-2xl font-bold text-blue-600 mb-6"></p>
+         <div class="space-y-2">
+          <p class="text-sm text-gray-600">Sistem mengalihkan Anda ke halaman ujian...</p>
+          <div class="flex justify-center gap-1 mt-4">
+           <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+           <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+           <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Footer -->
+   <div class="border-t border-gray-200 bg-white bg-opacity-50 backdrop-filter backdrop-blur-xl">
+    <div class="max-w-5xl mx-auto px-6 py-6">
+     <div class="flex items-center justify-between text-xs text-gray-600">
+      <p>© 2024 Portal Ujian Online. Semua hak cipta dilindungi.</p>
+      <p>Versi 1.0 | Dipercaya oleh ribuan peserta</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const daftarPeserta = [
+      "SAIFUL BAHRI",
+      "MUALLIMATUL UMMAH",
+      "MOH. FARHAN RAMADHANI",
+      "FARHAN",
+      "TUTIK FELIANTI PUTRI",
+      "KARTIKA PUTRI AULIA",
+      "HATIKURROHMAN",
+      "ANNAILATUR RAHMANIYAH",
+      "DEWIYAH",
+      "FEBRIYANSYAH",
+      "MAHMUD",
+      "NOR HAZIZAH",
+      "SELVIA UMAMI",
+      "ST. NUR ALISA",
+      "ACHMAD READI",
+      "AHMAD WENENTE",
+      "DIFA PRATIWI",
+      "MOH RIFQI",
+      "MOH ZAINAL EFENDI",
+      "MUHAMMAD ARIL MAULANA",
+      "MUHAMMAD NASHRULLOH",
+      "MUTIARA HIKMAH ROMADHANI",
+      "NAILATUL FITRIYAH",
+      "NOR LAILI HIDAYANTI",
+      "SAIFUL RIZAL",
+      "SITTI HAJAR",
+      "WILDA RAMADHANI"
+    ];
+
+    const linkUjian = "https://docs.google.com/forms/d/e/1FAIpQLSffXgbiz3_gUrr9AA3vvD68zgNfLn7VuYYAnJpKIYVwKdtiEw/viewform";
+
+    const defaultConfig = {
+      institution_name: "Portal Ujian Online",
+      exam_title: "Ujian Online",
+      exam_date: "15 Januari 2024",
+      instructions: "Masukkan nama lengkap Anda sesuai daftar peserta",
+      button_text: "Lanjut ke Ujian",
+      primary_color: "#3b82f6",
+      secondary_color: "#2563eb",
+      text_color: "#1f2937",
+      bg_color: "#ffffff",
+      accent_color: "#eff6ff"
+    };
+
+    // Elements
+    const form = document.getElementById('verification-form');
+    const inputNama = document.getElementById('nama-peserta');
+    const errorMessage = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
+    const formContainer = document.getElementById('form-container');
+    const successContainer = document.getElementById('success-container');
+    const welcomeName = document.getElementById('welcome-name');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Elements untuk config
+    const institutionNameEl = document.getElementById('institution-name');
+    const examTitleEl = document.getElementById('exam-title');
+    const examDateEl = document.getElementById('exam-date');
+    const instructionsEl = document.getElementById('instructions');
+    const buttonTextEl = document.getElementById('button-text');
+
+    function verifyParticipant(nama) {
+      const namaUpper = nama.trim().toUpperCase();
+      return daftarPeserta.find(p => p.toUpperCase() === namaUpper);
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const nama = inputNama.value.trim();
+      submitBtn.disabled = true;
+
+      if (!nama) {
+        errorMessage.classList.remove('hidden');
+        errorText.textContent = 'Silakan masukkan nama Anda';
+        inputNama.classList.add('error-shake', 'border-red-500');
+        inputNama.classList.remove('border-gray-300');
+        submitBtn.disabled = false;
+        setTimeout(() => {
+          inputNama.classList.remove('error-shake');
+        }, 400);
+        return;
+      }
+
+      // Simulasi delay untuk efek pemrosesan
+      await new Promise(resolve => setTimeout(resolve, 600));
+
+      const pesertaValid = verifyParticipant(nama);
+
+      if (pesertaValid) {
+        errorMessage.classList.add('hidden');
+        inputNama.classList.remove('error-shake', 'border-red-500');
+        formContainer.classList.add('hidden');
+        successContainer.classList.remove('hidden');
+        welcomeName.textContent = pesertaValid;
+
+        setTimeout(() => {
+          window.open(linkUjian, '_blank', 'noopener,noreferrer');
+        }, 2500);
+      } else {
+        errorMessage.classList.remove('hidden');
+        errorText.textContent = 'Nama tidak ditemukan dalam daftar peserta';
+        inputNama.classList.add('error-shake', 'border-red-500');
+        inputNama.classList.remove('border-gray-300');
+        submitBtn.disabled = false;
+        setTimeout(() => {
+          inputNama.classList.remove('error-shake');
+        }, 400);
+      }
+    });
+
+    inputNama.addEventListener('input', function() {
+      errorMessage.classList.add('hidden');
+      inputNama.classList.remove('border-red-500');
+      inputNama.classList.add('border-gray-300');
+    });
+
+    async function onConfigChange(config) {
+      institutionNameEl.textContent = config.institution_name || defaultConfig.institution_name;
+      examTitleEl.textContent = config.exam_title || defaultConfig.exam_title;
+      examDateEl.textContent = config.exam_date || defaultConfig.exam_date;
+      instructionsEl.textContent = config.instructions || defaultConfig.instructions;
+      buttonTextEl.textContent = config.button_text || defaultConfig.button_text;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.primary_color || defaultConfig.primary_color,
+            set: (value) => {
+              config.primary_color = value;
+              window.elementSdk.setConfig({ primary_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["institution_name", config.institution_name || defaultConfig.institution_name],
+        ["exam_title", config.exam_title || defaultConfig.exam_title],
+        ["exam_date", config.exam_date || defaultConfig.exam_date],
+        ["instructions", config.instructions || defaultConfig.instructions],
+        ["button_text", config.button_text || defaultConfig.button_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ce22ba685d5ea76',t:'MTc3MTEzMDg4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
